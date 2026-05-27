@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assistente Laboratorio</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body class="app">
+
+  <!-- ELEMENT 1: PROGRESS BAR -->
+  <div id="progressBar" style="position: fixed; top: 0; width: 100%; height: 70px; background: rgba(15,17,23,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; z-index: 100;">
+    <div style="display: flex; align-items: center; width: 280px;">
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <div id="dot0" class="progress-dot" style="width: 12px; height: 12px; border-radius: 50%; position: relative;"></div>
+        <span style="font-size: 9px; color: #718096; text-align: center; margin-top: 4px; white-space: nowrap;">Terreno</span>
+      </div>
+      <div style="height: 2px; flex: 1; max-width: 40px; background: #4a5568;"></div>
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <div id="dot1" class="progress-dot" style="width: 12px; height: 12px; border-radius: 50%; position: relative;"></div>
+        <span style="font-size: 9px; color: #718096; text-align: center; margin-top: 4px; white-space: nowrap;">Lievito</span>
+      </div>
+      <div style="height: 2px; flex: 1; max-width: 40px; background: #4a5568;"></div>
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <div id="dot2" class="progress-dot" style="width: 12px; height: 12px; border-radius: 50%; position: relative;"></div>
+        <span style="font-size: 9px; color: #718096; text-align: center; margin-top: 4px; white-space: nowrap;">Semina</span>
+      </div>
+      <div style="height: 2px; flex: 1; max-width: 40px; background: #4a5568;"></div>
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <div id="dot3" class="progress-dot" style="width: 12px; height: 12px; border-radius: 50%; position: relative;"></div>
+        <span style="font-size: 9px; color: #718096; text-align: center; margin-top: 4px; white-space: nowrap;">Incubazione</span>
+      </div>
+      <div style="height: 2px; flex: 1; max-width: 40px; background: #4a5568;"></div>
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <div id="dot4" class="progress-dot" style="width: 12px; height: 12px; border-radius: 50%; position: relative;"></div>
+        <span style="font-size: 9px; color: #718096; text-align: center; margin-top: 4px; white-space: nowrap;">Osservazione</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ELEMENT 2: VOICE VISUALIZER -->
+  <div style="position: fixed; top: 70px; bottom: 88px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;">
+    <!-- Main Circle -->
+    <div id="voiceCircle" style="width: 180px; height: 180px; border-radius: 50%; position: relative; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s ease; cursor: pointer;">
+      <!-- Rings -->
+      <div id="ring1" style="width: 100%; height: 100%; border-radius: 50%; position: absolute; top: 0; left: 0; opacity: 0; pointer-events: none;"></div>
+      <div id="ring2" style="width: 100%; height: 100%; border-radius: 50%; position: absolute; top: 0; left: 0; opacity: 0; pointer-events: none;"></div>
+      <div id="ring3" style="width: 100%; height: 100%; border-radius: 50%; position: absolute; top: 0; left: 0; opacity: 0; pointer-events: none;"></div>
+      <!-- Mic Icon -->
+      <svg id="micIcon" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+        <line x1="12" y1="19" x2="12" y2="23"></line>
+        <line x1="8" y1="23" x2="16" y2="23"></line>
+      </svg>
+    </div>
+    <!-- State Label -->
+    <p id="stateLabel" style="font-size: 15px; color: #718096; height: 20px; text-align: center;"></p>
+  </div>
+
+  <!-- ELEMENT 3: BOTTOM ACTION BAR -->
+  <div style="position: fixed; bottom: 0; width: 100%; height: 88px; background: rgba(15,17,23,0.96); backdrop-filter: blur(12px); border-top: 1px solid rgba(255,255,255,0.07); display: flex; align-items: center; justify-content: center; gap: 20px; z-index: 100;">
+    <button id="repeatBtn" style="width: 44px; height: 44px; border-radius: 50%; background: #2d3748; border: none; font-size: 18px; cursor: pointer; color: white;">🔁</button>
+    <button id="confirmBtn" style="width: 44px; height: 44px; border-radius: 50%; background: #2d3748; border: none; font-size: 18px; cursor: pointer; color: white;">✅</button>
+    <button id="dataBtn" style="width: 44px; height: 44px; border-radius: 50%; background: #2d3748; border: none; font-size: 18px; cursor: pointer; color: white;">📋</button>
+    <button id="moreBtn" style="width: 44px; height: 44px; border-radius: 50%; background: #2d3748; border: none; font-size: 18px; cursor: pointer; color: white;">···</button>
+  </div>
+
+  <!-- More Options Menu -->
+  <div id="moreMenu" style="position: fixed; bottom: 96px; left: 50%; transform: translateX(-50%); background: #1a202c; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 8px; display: none; z-index: 200; min-width: 200px;">
+    <div id="analysisOption" style="padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 15px; color: #e2e8f0;">📊 Analisi risultati</div>
+    <div id="reportOption" style="padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 15px; color: #e2e8f0;">📄 Genera relazione</div>
+    <div id="resetOption" style="padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 15px; color: #e2e8f0;">🔄 Reimposta sessione</div>
+    <div id="closeMenuOption" style="padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 15px; color: #e2e8f0;">✕ Chiudi</div>
+  </div>
+
+  <!-- DATA PANEL OVERLAY -->
+  <div id="dataPanel" style="position: fixed; bottom: 0; left: 0; right: 0; height: 85vh; background: #1a202c; border-radius: 20px 20px 0 0; transform: translateY(100%); transition: transform 0.35s ease; overflow-y: auto; padding: 0 0 100px 0; z-index: 300;">
+    <!-- Sticky Header -->
+    <div style="position: sticky; top: 0; background: #1a202c; padding: 20px 20px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.06);">
+      <span style="font-size: 18px; font-weight: bold; color: #e2e8f0;">Scheda dati</span>
+      <button id="closePanelBtn" style="background: none; border: none; color: #a0aec0; font-size: 24px; cursor: pointer;">✕</button>
+    </div>
+    <!-- Form -->
+    <form id="dataForm" style="padding: 20px;">
+      <div class="field-group">
+        <label>Numero piastre preparate</label>
+        <input type="number" id="platesPrepared" placeholder="">
+      </div>
+      <div class="field-group">
+        <label>Condizioni terreno osservate</label>
+        <textarea rows="3" id="agarCondition" placeholder=""></textarea>
+      </div>
+      <div class="field-group">
+        <label>Agar uniforme?</label>
+        <select id="agarUniform">
+          <option value="">— seleziona —</option>
+          <option value="sì">Sì</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Irregolarità osservate</label>
+        <textarea rows="2" id="irregularities" placeholder=""></textarea>
+      </div>
+      <div class="field-group">
+        <label>Numero provette diluizione</label>
+        <input type="number" id="dilutionTubes" placeholder="">
+      </div>
+      <div class="field-group">
+        <label>Campione preparato correttamente?</label>
+        <select id="sampleCorrect">
+          <option value="">— seleziona —</option>
+          <option value="sì">Sì</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Note sul campione</label>
+        <textarea rows="2" id="sampleNotes" placeholder=""></textarea>
+      </div>
+      <div class="field-group">
+        <label>Numero piastre seminate</label>
+        <input type="number" id="seededPlates" placeholder="">
+      </div>
+      <div class="field-group">
+        <label>Bacchetta nuova per ogni piastra?</label>
+        <select id="newStickEachPlate">
+          <option value="">— seleziona —</option>
+          <option value="sì">Sì</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Piastre capovolte?</label>
+        <select id="platesInverted">
+          <option value="">— seleziona —</option>
+          <option value="sì">Sì</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Temperatura incubazione (°C)</label>
+        <input type="number" id="incubationTemp" placeholder="">
+      </div>
+      <div class="field-group">
+        <label>Giorni di incubazione</label>
+        <input type="number" id="incubationDays" placeholder="">
+      </div>
+      <div class="field-group">
+        <label>Osservazioni immediate</label>
+        <textarea rows="3" id="immediateObs" placeholder=""></textarea>
+      </div>
+      <div class="field-group">
+        <label>Osservazioni dopo incubazione</label>
+        <textarea rows="3" id="finalObs" placeholder=""></textarea>
+      </div>
+      <div class="field-group">
+        <label>Livello crescita lieviti</label>
+        <select id="growthLevel">
+          <option value="">— seleziona —</option>
+          <option value="assente">Assente</option>
+          <option value="scarsa">Scarsa</option>
+          <option value="media">Media</option>
+          <option value="abbondante">Abbondante</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Distribuzione crescita</label>
+        <select id="growthDistribution">
+          <option value="">— seleziona —</option>
+          <option value="uniforme">Uniforme</option>
+          <option value="non uniforme">Non uniforme</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Condensa presente?</label>
+        <select id="condensation">
+          <option value="">— seleziona —</option>
+          <option value="sì">Sì</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Contaminazione presente?</label>
+        <select id="contamination">
+          <option value="">— seleziona —</option>
+          <option value="sì">Sì</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Descrizione contaminazione</label>
+        <textarea rows="2" id="contaminationDesc" placeholder=""></textarea>
+      </div>
+      <div class="field-group">
+        <label>Note finali</label>
+        <textarea rows="3" id="finalNotes" placeholder=""></textarea>
+      </div>
+      <button type="button" id="saveDataBtn" style="position: sticky; bottom: 0; width: 100%; background: #3182ce; color: white; border: none; border-radius: 10px; padding: 14px; font-size: 16px; cursor: pointer; margin-top: 20px;">Salva dati</button>
+    </form>
+  </div>
+
+  <!-- ANALYSIS OVERLAY -->
+  <div id="analysisOverlay" style="position: fixed; inset: 0; background: #0f1117; z-index: 400; display: none; overflow-y: auto; padding: 24px 20px 40px;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <button id="closeAnalysisBtn" style="background: none; border: none; color: #a0aec0; font-size: 16px; cursor: pointer;">← Indietro</button>
+      <span style="font-size: 18px; font-weight: bold; color: #e2e8f0;">Analisi risultati</span>
+    </div>
+    <div id="analysisContent" style="margin-top: 24px; font-size: 16px; line-height: 1.8; color: #e2e8f0;"></div>
+  </div>
+
+  <!-- REPORT OVERLAY -->
+  <div id="reportOverlay" style="position: fixed; inset: 0; background: #0f1117; z-index: 400; display: none; overflow-y: auto; padding: 24px 20px 120px;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <button id="closeReportBtn" style="background: none; border: none; color: #a0aec0; font-size: 16px; cursor: pointer;">← Indietro</button>
+      <span style="font-size: 18px; font-weight: bold; color: #e2e8f0;">Relazione di laboratorio</span>
+    </div>
+    <div id="reportContent" style="margin-top: 24px; font-size: 14px; line-height: 1.8; white-space: pre-wrap; font-family: monospace; color: #e2e8f0;"></div>
+    <div style="position: fixed; bottom: 0; left: 0; right: 0; padding: 16px 20px; background: rgba(15,17,23,0.96); display: flex; gap: 12px;">
+      <button id="copyReportBtn" style="flex: 1; background: #2d3748; color: white; border: none; border-radius: 10px; padding: 14px; font-size: 15px; cursor: pointer;">Copia testo</button>
+      <button id="downloadReportBtn" style="flex: 1; background: #3182ce; color: white; border: none; border-radius: 10px; padding: 14px; font-size: 15px; cursor: pointer;">Scarica .txt</button>
+    </div>
+  </div>
+
+  <script src="data/experiment.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/voice.js"></script>
+  <script src="js/agent.js"></script>
+</body>
+</html>

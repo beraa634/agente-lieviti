@@ -1,0 +1,102 @@
+:root {
+  --bg: #0f1117;
+  --card: #1a202c;
+  --card-alt: #2d3748;
+  --primary: #3182ce;
+  --success: #38a169;
+  --warning: #dd6b20;
+  --danger: #e53e3e;
+  --text: #e2e8f0;
+  --muted: #718096;
+  --border: rgba(255,255,255,0.08);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, sans-serif;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* HOME PAGE styles */
+body.home {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 16px;
+}
+
+/* APP PAGE styles */
+body.app {
+  overflow: hidden;
+}
+
+/* Form field groups */
+.field-group {
+  margin-bottom: 20px;
+}
+
+.field-group label {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.field-group input,
+.field-group select,
+.field-group textarea {
+  width: 100%;
+  background: var(--card-alt);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 15px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.field-group input:focus,
+.field-group select:focus,
+.field-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* Notification */
+.notification {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--card);
+  color: var(--text);
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  z-index: 500;
+  animation: fadeInOut 2.5s forwards;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+  15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  75% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* More menu hover effects */
+#moreMenu > div:hover {
+  background: rgba(255,255,255,0.06);
+}
